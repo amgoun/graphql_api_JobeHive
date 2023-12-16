@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  role          UserRole       @default(USER)
+  jobs          Job[]
+  skills        Skill[]
+  cvPath        String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ratedUsers    Rating[]       @relation("rated")
+  ratingsGiven  Rating[]       @relation("rater")
+  subscriptions Subscription[]
+  applications  Application[]
+}
+
+model Job {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  company      String?
+  location     String
+  category     String
+  skillLevel   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt      @default(now())
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id])
+  skills       Skill[]
+  applications Application[]
+}
+
+model Skill {
+  id     Int    @id @default(autoincrement())
+  field  String
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  jobId  Int
+  job    Job    @relation(fields: [jobId], references: [id])
+}
+
+model Application {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  job       Job      @relation(fields: [jobId], references: [id])
+  userId    Int
+  jobId     Int
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model Subscription {
+  id           Int                @id @default(autoincrement())
+  createdAt    DateTime           @default(now())
+  stripePlanId String
+  stripeCustId String
+  expiresAt    DateTime
+  status       SubscriptionStatus @default(ACTIVE)
+  user         User               @relation(fields: [userId], references: [id])
+  userId       Int                @unique
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model PaymentPlan {
+  id           Int    @id @default(autoincrement())
+  name         String
+  price        Float
+  duration     String // Monthly or Lifetime
+  stripePlanId String @unique
+}
+
+model Rating {
+  id      Int     @id @default(autoincrement())
+  value   Int
+  comment String?
+  raterId Int
+  ratedId Int
+  rater   User    @relation("rater", fields: [raterId], references: [id])
+  rated   User    @relation("rated", fields: [ratedId], references: [id])
+}

@@ -1,0 +1,36 @@
+{
+  "name": "jobhive",
+  "version": "1.0.0",
+  "description": "jobs search",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "test": "jest test"
+  },
+  "author": "rachid amgoun",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.7.0",
+    "@prisma/client": "^4.13.0",
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "file-type": "^18.4.0",
+    "graphql": "^16.6.0",
+    "graphql-tag": "^2.12.6",
+    "graphql-upload": "^16.0.2",
+    "jest": "^29.5.0",
+    "jsonwebtoken": "^9.0.0",
+    "playwright": "^1.40.1",
+    "stripe": "^12.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.33.0",
+    "nodemon": "^2.0.22",
+    "prisma": "^4.13.0"
+  }
+}
